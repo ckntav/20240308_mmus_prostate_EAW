@@ -7,7 +7,7 @@ fastq_list_filename <- "rnaseq_mmus_prostate_EAW_fastq_list.txt"
 df <- read_tsv(file.path("input", "rnaseq_mmus_prostate_EAW", fastq_list_filename))
 output_pipeline_dir <- "rna-pipeline_mmus_prostate_EAW-GRCh38_PE"
 
-sparam <- "s0"
+sparam <- "s2"
 
 df_list <- list()
 for (i in 1:nrow(df)) {

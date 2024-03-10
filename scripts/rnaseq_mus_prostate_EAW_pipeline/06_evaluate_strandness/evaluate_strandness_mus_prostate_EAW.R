@@ -46,11 +46,11 @@ for (i in 1:nrow(df)) {
     rawData_s_tmp <- read_tsv(sample_i_filepath, col_names = FALSE, show_col_types = FALSE) %>%
         set_names("gene_id", "count")
     
-    rawData_s <- rawData_s_tmp %>% dplyr::filter(grepl(pattern = "ENSG", x = gene_id))
+    rawData_s <- rawData_s_tmp %>% dplyr::filter(grepl(pattern = "ENSM", x = gene_id))
 
     sumcount_sample_s <- rawData_s %>% pull(count) %>% sum
     message("\t> ", "htseq_reverse", " : ", sumcount_sample_s)
-    rawData_s_tmp %>% dplyr::filter(!grepl(pattern = "ENSG", x = gene_id)) %>% kable %>% print
+    rawData_s_tmp %>% dplyr::filter(!grepl(pattern = "ENSM", x = gene_id)) %>% kable %>% print
     res <- c(res, sumcount_sample_s)
 
         # sumcount gather everything

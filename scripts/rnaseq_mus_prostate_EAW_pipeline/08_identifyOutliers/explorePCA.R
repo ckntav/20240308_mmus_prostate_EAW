@@ -17,7 +17,7 @@ type_list <- c("Normal", "PCa")
 fastq_list_filename <- "rnaseq_mmus_prostate_EAW_fastq_list.txt"
 design <- read_tsv(file.path("input", "rnaseq_mmus_prostate_EAW", fastq_list_filename)) %>%
   mutate(sample_id = sample_name) %>% 
-  dplyr::select(sample_id, condition)
+  dplyr::select(sample_id, type, condition)
 design$type <- factor(design$type, levels = type_list)
 design$condition <- factor(design$condition, levels = condition_list)
 
@@ -53,7 +53,7 @@ head(assay(vsd), 10)
 ##### PCA
 pca_plot <- plotPCA(vsd, intgroup = "condition")
 pca_plot + geom_text(label =  gsub("RNA_", "", current_design$sample_id),
-                     size = 5,
+                     size = 2,
                      vjust = 2) +
   theme_minimal()
 
@@ -75,31 +75,34 @@ pca_data %>%
   theme_minimal() +
   scale_colour_manual(values = cols_pca)
 
-# TODO how to select shape
 pca_data %>% 
+  rownames_to_column("sample_id") %>% 
+  mutate(type = str_split(pattern = "_", sample_id) %>% map(1) %>% unlist) %>% 
   ggplot(aes(x = PC1, y = PC2, color = group)) +
-  geom_point() +
-  geom_text(label = pca_data$name, vjust = 2) +
+  geom_point(aes(shape = type), size = 3) +
+  geom_text(label = pca_data$name, size = 2, vjust = 3) +
   theme_minimal() +
   scale_colour_manual(values = cols_pca) +
-  coord_ratio()
-
-for (t in condition_list) {
-  message("# ", t)
-  
-  pca_data_t <- pca_data %>% mutate(labelt = ifelse(group == t, name, ""),
-                                    sizet = ifelse(group == t, 4, 2))
-  
-  plot_t <- 
-  pca_data_t %>% 
-    ggplot(aes(x = PC1, y = PC2, color = group)) +
-    geom_point(size = pca_data_t$sizet) +
-    geom_text(label = pca_data_t$labelt, vjust = 2) +
-    theme_minimal() +
-    scale_colour_manual(values = cols_pca)
-  
-  print(plot_t)
-  
-  readline(prompt="Press [enter] to continue")
-}
+  coord_fixed()
+ 
+# 
+# 
+# for (t in condition_list) {
+#   message("# ", t)
+#   
+#   pca_data_t <- pca_data %>% mutate(labelt = ifelse(group == t, name, ""),
+#                                     sizet = ifelse(group == t, 4, 2))
+#   
+#   plot_t <- 
+#   pca_data_t %>% 
+#     ggplot(aes(x = PC1, y = PC2, color = group)) +
+#     geom_point(size = pca_data_t$sizet) +
+#     geom_text(label = pca_data_t$labelt, vjust = 2) +
+#     theme_minimal() +
+#     scale_colour_manual(values = cols_pca)
+#   
+#   print(plot_t)
+#   
+#   readline(prompt="Press [enter] to continue")
+# }
 

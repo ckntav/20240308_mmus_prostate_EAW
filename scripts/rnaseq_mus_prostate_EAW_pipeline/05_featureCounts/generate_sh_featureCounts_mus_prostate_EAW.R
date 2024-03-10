@@ -11,12 +11,12 @@ output_pipeline_dir <- "rna-pipeline_mmus_prostate_EAW-GRCh38_PE"
 script_pipeline_dir <- "rnaseq_mus_prostate_EAW_pipeline"
 workdir <- "/home/chris11/projects/def-stbil30/chris11/20240308_mmus_prostate_EAW"
 
-strandness <- 2
+strandness <- 0
 strandness_chr <- paste0("s", strandness)
 
 alignment_dir <- file.path("output", output_pipeline_dir, "alignment")
 featureCount_dir <- file.path("output", output_pipeline_dir, paste(sep = "_", "featureCounts", strandness_chr))
-ensembl_path <- "input/ensembl/Homo_sapiens.GRCh38.104.gtf"
+ensembl_path <- "input/ensembl/Mus_musculus.GRCm38.Ensembl102.gtf"
 # gencode_path <- file.path(workdir, "input", "gencode", "gencode.v29.annotation.gtf")
 
 message("mkdir -p ", file.path(workdir, featureCount_dir))

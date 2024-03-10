@@ -9,4 +9,4 @@
 #SBATCH --mail-type=ALL
 
 
-featureCounts -T 1 -p --countReadPairs -B -t exon -g gene_id -s 0 -a input/ensembl/Homo_sapiens.GRCh38.104.gtf -o /home/chris11/projects/def-stbil30/chris11/20240308_mmus_prostate_EAW/output/rna-pipeline_mmus_prostate_EAW-GRCh38_PE/featureCounts_s0/PCa_RNA_T_rep2.featureCounts.tsv /home/chris11/projects/def-stbil30/chris11/20240308_mmus_prostate_EAW/output/rna-pipeline_mmus_prostate_EAW-GRCh38_PE/alignment/PCa_RNA_T_rep2/PCa_RNA_T_rep2.QueryNameSorted.bam
+featureCounts -T 1 -p --countReadPairs -B -t exon -g gene_id -s 0 -a input/ensembl/Mus_musculus.GRCm38.Ensembl102.gtf -o /home/chris11/projects/def-stbil30/chris11/20240308_mmus_prostate_EAW/output/rna-pipeline_mmus_prostate_EAW-GRCh38_PE/featureCounts_s0/PCa_RNA_T_rep2.featureCounts.tsv /home/chris11/projects/def-stbil30/chris11/20240308_mmus_prostate_EAW/output/rna-pipeline_mmus_prostate_EAW-GRCh38_PE/alignment/PCa_RNA_T_rep2/PCa_RNA_T_rep2.QueryNameSorted.bam

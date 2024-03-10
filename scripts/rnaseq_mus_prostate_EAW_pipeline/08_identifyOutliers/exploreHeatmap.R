@@ -5,6 +5,7 @@ library(DESeq2)
 library(RColorBrewer)
 library(ComplexHeatmap)
 library(wesanderson)
+library(kableExtra)
 
 #
 sparam <- "s2"
@@ -17,7 +18,7 @@ type_list <- c("Normal", "PCa")
 fastq_list_filename <- "rnaseq_mmus_prostate_EAW_fastq_list.txt"
 design <- read_tsv(file.path("input", "rnaseq_mmus_prostate_EAW", fastq_list_filename)) %>%
   mutate(sample_id = sample_name) %>% 
-  dplyr::select(sample_id, condition)
+  dplyr::select(sample_id, type, condition)
 design$type <- factor(design$type, levels = type_list)
 design$condition <- factor(design$condition, levels = condition_list)
 
@@ -26,6 +27,9 @@ bad_replicates_list <- c()
 # 
 design <- design %>%
   dplyr::filter(!sample_id %in% bad_replicates_list)
+
+#
+design %>% kbl %>% kable_classic_2(full_width = FALSE)
 
 #
 raw_counts <- read_csv(file.path("output/rna-pipeline_mmus_prostate_EAW-GRCh38_PE",
@@ -61,7 +65,8 @@ sampleDistMatrix
 print(max(sampleDistMatrix))
 
 annotMatrix <- data.frame(sample_id = rownames(sampleDistMatrix)) %>% 
-  mutate(condition = str_split(sample_id, pattern = "_") %>% map(1) %>% unlist)
+  mutate(type = str_split(sample_id, pattern = "_") %>% map(1) %>% unlist,
+         condition = str_split(sample_id, pattern = "_") %>% map(2) %>% unlist)
 
 tpMat <- annotMatrix %>% dplyr::select(type, condition) %>% as.matrix %>% t
 
@@ -69,7 +74,7 @@ cols_ht <- wes_palette("Zissou1", 4, type = "continuous") %>% as.vector
 # names(cols_ht) <- tpMat[1, ] %>% unique # c("0h", time_point_list)
 
 rowAnnot <- rowAnnotation("type" = tpMat[1, ],
-                          "condition" = tpMat[1, ],
+                          "condition" = tpMat[2, ],
                           annotation_legend_param = list(
                             type = list(labels = type_list,
                                         at = type_list),
@@ -86,7 +91,10 @@ colorBlues
 #
 ht <- Heatmap(sampleDistMatrix, col = colorBlues, name = "distance",
               row_dend_width = unit(25, "mm"), show_column_dend = FALSE,
-              column_dend_side = "bottom", column_names_side = "top", column_names_rot = 45,
+              column_dend_side = "bottom", column_names_side = "top",
+              column_names_rot = 45,
+              column_names_gp = grid::gpar(fontsize = 8),
+              row_names_gp = grid::gpar(fontsize = 8),
               right_annotation = rowAnnot)
 
 ht
