@@ -58,7 +58,7 @@ for (i in 1:nrow(df)) {
                       "--overrepresentation_analysis",
                       "--overrepresentation_sampling", 10,
                       "--thread", 8,
-                      "--length_required", 10,
+                      "--length_required", 99,
                       "--out1", out_fastq_R1_filepath,
                       "--out2", out_fastq_R2_filepath,
                       "--html", out_html_report,
